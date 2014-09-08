@@ -84,7 +84,7 @@
             // XDomainRequest can only be used for async get/post requests across same scheme, which must be http: or https:
             return crossDomain && async && getOrPostRegEx.test(method) && httpRegEx.test(remoteUrl) && sameSchemeRegEx.test(remoteUrl);
         }
-        catch(ex) {
+        catch (ex) {
             return false;
         }
     };
@@ -138,6 +138,11 @@
                     self.onload();
                 }
             };
+            request.onprogress = function () {
+                if (self.onprogress) {
+                    self.onprogress.apply(self, arguments);
+                }
+            };
         }
 
         else {
@@ -149,37 +154,37 @@
                     self.status = request.status;
                     self.statusText = request.statusText;
                     self.responseText = request.responseText;
-                    self.responseXML  = request.responseXML;
+                    self.responseXML = request.responseXML;
                 }
                 self._setReadyState(request.readyState);
             };
-            request.onabort = function() {
-                if(self.onabort) {
+            request.onabort = function () {
+                if (self.onabort) {
                     self.onabort.apply(self, arguments);
                 }
             };
-            request.onerror = function() {
-                if(self.onerror) {
+            request.onerror = function () {
+                if (self.onerror) {
                     self.onerror.apply(self, arguments);
                 }
             };
-            request.onload = function() {
-                if(self.onload) {
+            request.onload = function () {
+                if (self.onload) {
                     self.onload.apply(self, arguments);
                 }
             };
-            request.onloadend = function() {
-                if(self.onloadend) {
+            request.onloadend = function () {
+                if (self.onloadend) {
                     self.onloadend.apply(self, arguments);
                 }
             };
-            request.onloadstart = function() {
-                if(self.onloadstart) {
+            request.onloadstart = function () {
+                if (self.onloadstart) {
                     self.onloadstart.apply(self, arguments);
                 }
             };
-            request.onprogress = function() {
-                if(self.onprogress) {
+            request.onprogress = function () {
+                if (self.onprogress) {
                     self.onprogress.apply(self, arguments);
                 }
             };
@@ -232,14 +237,14 @@
         if (this._request.getResponseHeader) {
             return this._request.getResponseHeader.apply(this._request, arguments);
         }
-        if(typeof  header !== "string") {
+        if (typeof  header !== "string") {
             return;
         }
         header = header.toLowerCase();
-        if(header === "content-type") {
+        if (header === "content-type") {
             return this._request.contentType;
         }
-        else if(header === "content-length") {
+        else if (header === "content-length") {
             return this.responseText.length;
         }
     };
