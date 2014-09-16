@@ -113,6 +113,7 @@
         if (useXDR(method, url, async)) {
             // Use XDR
             request = new XDomainRequest();
+            request._xdr = true;
             request.onerror = function () {
                 self.status = 400;
                 self.statusText = "Error";
@@ -202,8 +203,18 @@
     };
 
     window.XMLHttpRequest.prototype.send = function (body) {
+        var self = this;
         this._request.withCredentials = this.withCredentials;
-        this._request.send(body);
+
+        if (this._request._xdr) {
+            setTimeout(function () {
+                self._request.send(body);
+            }, 0);
+        }
+        else {
+            this._request.send(body);
+        }
+
         if (this._request.readyState === 4) {
             // when async==false the browser is blocked until the transfer is complete and readyState becomes 4
             // onreadystatechange should not get called in this case
