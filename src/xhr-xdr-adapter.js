@@ -152,10 +152,14 @@
             request.withCredentials = this.withCredentials;
             request.onreadystatechange = function () {
                 if (request.readyState === 4) {
-                    self.status = request.status;
-                    self.statusText = request.statusText;
-                    self.responseText = request.responseText;
-                    self.responseXML = request.responseXML;
+                    try {
+                        self.status = request.status;
+                        self.statusText = request.statusText;
+                        self.responseText = request.responseText;
+                        self.responseXML = request.responseXML;
+                    } catch (e) {
+
+                    }
                 }
                 self._setReadyState(request.readyState);
             };
