@@ -117,7 +117,7 @@
             request.onerror = function () {
                 self.status = 400;
                 self.statusText = "Error";
-                self._setReadyState(0);
+                self._setReadyState(4);
                 if (self.onerror) {
                     self.onerror();
                 }
