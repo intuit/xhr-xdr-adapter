@@ -69,6 +69,12 @@
         var crossDomain;
 
         try {
+            // check to see if this is a "same-scheme" URL ("//example.com").
+            // prepend location.protocol if so.
+            if (remoteUrl[0] === '/' && remoteUrl[1] === '/') {
+                remoteUrl = location.protocol + remoteUrl;
+            }
+         
             // account for the possibility of a <base href="..."> setting, which could make a URL that looks relative actually be cross-domain
             if ((remoteUrl && remoteUrl.indexOf("://") < 0) && document.getElementsByTagName('base').length > 0) {
                 baseHref = document.getElementsByTagName('base')[0].href;
