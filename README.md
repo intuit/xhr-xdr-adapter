@@ -36,6 +36,13 @@ Alternatively, you could conditionally include it in the relevant versions of IE
     <script src="scripts/xhr-xdr-adapter.js" type="text/javascript"></script>
     <![endif]-->
 
+If your are using a npm module packager:
+
+```js
+require('xhr-xdr-adapter');
+import 'xhr-xdr-adapter';
+```
+
 ## Contributing
 Contributions are welcome. If you find issues or features that we could support on IE 8 and are not currently supported, please submit a pull request.
 
