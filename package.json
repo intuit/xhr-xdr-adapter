@@ -1,0 +1,24 @@
+{
+  "name": "xhr-xdr-adapter",
+  "version": "1.0.0",
+  "description": "Enables, to the extent possible, support for Cross Origin Resource Sharing (CORS) on IE versions 8 and 9",
+  "main": "src/xhr-xdr-adapter.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/intuit/xhr-xdr-adapter.git"
+  },
+  "keywords": [
+    "xhr",
+    "ie",
+    "xdr"
+  ],
+  "author": "intuit",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/intuit/xhr-xdr-adapter/issues"
+  },
+  "homepage": "https://github.com/intuit/xhr-xdr-adapter#readme"
+}
