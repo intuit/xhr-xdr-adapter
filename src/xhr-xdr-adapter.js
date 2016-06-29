@@ -43,14 +43,10 @@
 (function () {
     "use strict";
     // Ignore everything below if not on IE 8 or IE 9.
-    if (!window.XDomainRequest) {  // typeof XDomainRequest is 'object' in IE 8, 'function' in IE 9
-        return;
-    }
-    if ('withCredentials' in new window.XMLHttpRequest()) {
-        return;
-    }
-    if (window.XMLHttpRequest.supportsXDR === true) {
-        // already set up
+    if (typeof(window.XDomainRequest) === 'undefined' ||
+        'withCredentials' in new window.XMLHttpRequest() ||
+        window.XMLHttpRequest.supportsXDR === true)
+    {
         return;
     }
 
@@ -67,6 +63,8 @@
         var myLocationParts;
         var remoteLocationParts;
         var crossDomain;
+
+        async = async || true;
 
         try {
             // check to see if this is a "same-scheme" URL ("//example.com").
@@ -110,7 +108,38 @@
         this.status = 0;
         this.statusText = "";
         this.withCredentials = false;
+        this.events=[];
     };
+
+    window.XMLHttpRequest.prototype.addEventListener=function(event,callback){
+      this.events[event] = this.events[event] || [];
+      if ( this.events[event] ) {
+        this.events[event].push(callback);
+      }
+    }
+
+    window.XMLHttpRequest.prototype.removeEventListener=function(event,callback){
+      if ( this.events[event] ) {
+        var listeners = this.events[event];
+        for ( var i = listeners.length-1; i>=0; --i ){
+          if ( listeners[i] === callback ) {
+            listeners.splice( i, 1 );
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
+    window.XMLHttpRequest.prototype.dispatch=function(event){
+      if ( this.events[event] ) {
+        var listeners = this.events[event], len = listeners.length;
+        while ( len-- ) {
+          listeners[len](this); //callback with self
+        }   
+      }
+    }
+
 
     window.XMLHttpRequest.prototype.open = function (method, url, async) {
         var self = this;
@@ -124,6 +153,7 @@
                 self.status = 400;
                 self.statusText = "Error";
                 self._setReadyState(4);
+                self.dispatch('error');
                 if (self.onerror) {
                     self.onerror();
                 }
@@ -132,6 +162,7 @@
                 self.status = 408;
                 self.statusText = "Timeout";
                 self._setReadyState(2);
+                self.dispatch('error');
                 if (self.ontimeout) {
                     self.ontimeout();
                 }
@@ -141,6 +172,7 @@
                 self.status = 200;
                 self.statusText = "OK";
                 self._setReadyState(4);
+                self.dispatch('load');
                 if (self.onload) {
                     self.onload();
                 }
